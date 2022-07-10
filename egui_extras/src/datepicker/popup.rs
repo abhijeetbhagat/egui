@@ -23,7 +23,7 @@ impl DatePickerPopupState {
     }
 }
 
-pub(crate) struct DatePickerPopup<'a> {
+pub struct DatePickerPopup<'a> {
     pub selection: &'a mut Date<Utc>,
     pub button_id: Id,
     pub combo_boxes: bool,
@@ -75,6 +75,7 @@ impl<'a> DatePickerPopup<'a> {
                         builder.sizes(Size::remainder(), 3).horizontal(|mut strip| {
                             strip.cell(|ui| {
                                 ComboBox::from_id_source("date_picker_year")
+                                    .width(50.0)
                                     .selected_text(popup_state.year.to_string())
                                     .show_ui(ui, |ui| {
                                         for year in today.year() - 5..today.year() + 10 {
@@ -82,7 +83,9 @@ impl<'a> DatePickerPopup<'a> {
                                                 .selectable_value(
                                                     &mut popup_state.year,
                                                     year,
-                                                    year.to_string(),
+                                                    RichText::new(
+                                                        year.to_string(),
+                                                    ).size(9.0)
                                                 )
                                                 .changed()
                                             {
@@ -98,6 +101,7 @@ impl<'a> DatePickerPopup<'a> {
                             });
                             strip.cell(|ui| {
                                 ComboBox::from_id_source("date_picker_month")
+                                    .width(50.0)
                                     .selected_text(month_name(popup_state.month))
                                     .show_ui(ui, |ui| {
                                         for month in 1..=12 {
@@ -105,7 +109,9 @@ impl<'a> DatePickerPopup<'a> {
                                                 .selectable_value(
                                                     &mut popup_state.month,
                                                     month,
-                                                    month_name(month),
+                                                    RichText::new(
+                                                        month_name(month),
+                                                    ).size(9.0)
                                                 )
                                                 .changed()
                                             {
@@ -121,6 +127,7 @@ impl<'a> DatePickerPopup<'a> {
                             });
                             strip.cell(|ui| {
                                 ComboBox::from_id_source("date_picker_day")
+                                    .width(40.0)
                                     .selected_text(popup_state.day.to_string())
                                     .show_ui(ui, |ui| {
                                         for day in 1..=popup_state.last_day_of_month() {
@@ -128,7 +135,10 @@ impl<'a> DatePickerPopup<'a> {
                                                 .selectable_value(
                                                     &mut popup_state.day,
                                                     day,
-                                                    day.to_string(),
+                                                    RichText::new(
+                                                        day.to_string(),
+                                                    ).size(9.0)
+
                                                 )
                                                 .changed()
                                             {
@@ -163,7 +173,7 @@ impl<'a> DatePickerPopup<'a> {
                             strip.cell(|ui| {
                                 ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
                                     if ui
-                                        .button("<<")
+                                        .button("«")
                                         .on_hover_text("substract one month")
                                         .clicked()
                                     {
@@ -251,7 +261,7 @@ impl<'a> DatePickerPopup<'a> {
                                         ui.with_layout(
                                             Layout::centered_and_justified(Direction::TopDown),
                                             |ui| {
-                                                ui.label("Week");
+                                                ui.label("W");
                                             },
                                         );
                                     });
@@ -354,6 +364,7 @@ impl<'a> DatePickerPopup<'a> {
                     });
                 }
 
+                /*
                 strip.strip(|builder| {
                     builder.sizes(Size::remainder(), 3).horizontal(|mut strip| {
                         strip.empty();
@@ -381,6 +392,7 @@ impl<'a> DatePickerPopup<'a> {
                         });
                     });
                 });
+                */
             });
 
         if close {
@@ -397,18 +409,18 @@ impl<'a> DatePickerPopup<'a> {
 
 fn month_name(i: u32) -> &'static str {
     match i {
-        1 => "January",
-        2 => "February",
-        3 => "March",
-        4 => "April",
+        1 => "Jan",
+        2 => "Feb",
+        3 => "Mar",
+        4 => "Apr",
         5 => "May",
-        6 => "June",
-        7 => "July",
-        8 => "August",
-        9 => "September",
-        10 => "October",
-        11 => "November",
-        12 => "December",
+        6 => "Jun",
+        7 => "Jul",
+        8 => "Aug",
+        9 => "Sep",
+        10 => "Oct",
+        11 => "Nov",
+        12 => "Dec",
         _ => panic!("Unknown month: {}", i),
     }
 }
